@@ -1,4 +1,4 @@
-const width = 1000, height = 500, margin = 50;
+const width = 1000, height = 600, margin = 50;
 let scene = 0;
 const svg = d3.select("#viz").append("svg")
   .attr("width", width)
@@ -142,6 +142,25 @@ function drawBarChart({ data }) {
     .attr("transform", `translate(${margin}, 0)`)
     .call(d3.axisLeft(y));
     
-
+  // Add legend at bottom
+  const countriesInData = [...new Set(data.map(d => d.country))];
+  const legend = svg.append("g")
+    .attr("transform", `translate(${margin}, ${height+10})`);
+    
+  countriesInData.forEach((country, i) => {
+    const legendItem = legend.append("g")
+      .attr("transform", `translate(${i * 120}, 0)`);
+      
+    legendItem.append("rect")
+      .attr("width", 15)
+      .attr("height", 15)
+      .attr("fill", countryColorMap[country] || "#cccccc");
+      
+    legendItem.append("text")
+      .attr("x", 20)
+      .attr("y", 12)
+      .attr("font-size", "12px")
+      .text(country.length > 15 ? country.substring(0, 15) + "..." : country);
+  });
 }
 
