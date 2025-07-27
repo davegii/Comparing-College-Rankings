@@ -156,6 +156,30 @@ function drawBarChart({ data }) {
     .attr("transform", `translate(${margin}, 0)`)
     .call(d3.axisLeft(y));
     
+  // Add dotted line between 15 bar
+  const barWidth = x.bandwidth();
+  const barSpacing = (width - 2 * margin - data.length * barWidth) / (data.length - 1);
+  const lineX = margin + 15 * barWidth + 15 * barSpacing + barWidth / 2;
+  
+  svg.append("line")
+    .attr("x1", lineX)
+    .attr("y1", margin)
+    .attr("x2", lineX)
+    .attr("y2", height - margin - 250)
+    .attr("stroke", "#666")
+    .attr("stroke-width", 2)
+    .attr("stroke-dasharray", "5,5");
+    
+  // annotation
+  svg.append("text")
+    .attr("x", lineX + 10)
+    .attr("y", 100)
+    .attr("font-size", "14px")
+    .attr("font-weight", "bold")
+    .attr("fill", "#666")
+    .text("Rankings drop off less significantly after this point");
+
+    
   // Add legend at bottom
   const countriesInData = [...new Set(data.map(d => d.country))];
   const legend = svg.append("g")
