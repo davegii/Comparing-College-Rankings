@@ -10,10 +10,10 @@ body {
   }
   #viz svg {
     width: 100%;
-    height: 625px;
+    height: 650px;
   }
   #buttons {
-    margin-top: 40px;
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
   }

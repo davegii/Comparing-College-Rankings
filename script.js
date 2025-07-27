@@ -1,4 +1,4 @@
-const width = 1000, height = 600, margin = 50;
+const width = 1000, height = 650, margin = 50;
 let scene = 0;
 const svg = d3.select("#viz").append("svg")
   .attr("width", width)
@@ -126,7 +126,7 @@ function drawBarChart({ data }) {
   const y = d3.scaleLinear()
     .domain([0, d3.max(data, d => d.score)])
     .nice()
-    .range([height - margin, margin]);
+    .range([height - margin - 250, margin]);
 
   // bbars
   svg.selectAll("rect")
@@ -136,18 +136,20 @@ function drawBarChart({ data }) {
     .attr("x", d => x(d.name))
     .attr("y", d => y(d.score))
     .attr("width", x.bandwidth())
-    .attr("height", d => height - margin - y(d.score))
+    .attr("height", d => height - margin - 250 - y(d.score))
     .attr("fill", d => countryColorMap[d.country] || "#cccccc")
     .append("title")
     .text(d => `${d.name}\nRank: #${d.rank}\nCountry: ${d.country}\nScore: ${d.score}`);
 
   // X axis
   svg.append("g")
-    .attr("transform", `translate(0, ${height - margin})`)
-    .call(d3.axisBottom(x).tickFormat(d => d.split(" ")[0]))
+    .attr("transform", `translate(0, ${height - margin - 250})`)
+    .call(d3.axisBottom(x).tickFormat(d => d.length > 20 ? d.substring(0, 20) + "..." : d))
     .selectAll("text")
-    .attr("transform", "rotate(-45)")
-    .style("text-anchor", "end");
+    .attr("transform", "rotate(-90)")
+    .style("text-anchor", "end")
+    .attr("dx", "-0.5em")
+    .attr("dy", "-0.5em");
 
   // Y-axis
   svg.append("g")
@@ -157,7 +159,7 @@ function drawBarChart({ data }) {
   // Add legend at bottom
   const countriesInData = [...new Set(data.map(d => d.country))];
   const legend = svg.append("g")
-    .attr("transform", `translate(${margin}, ${height+10})`);
+    .attr("transform", `translate(${margin}, ${height-100})`);
     
   countriesInData.forEach((country, i) => {
     const legendItem = legend.append("g")
