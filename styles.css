@@ -26,3 +26,10 @@ body {
     margin-bottom: 10px;
   }
   
+  #hover-note {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 5px;
+  }
+  

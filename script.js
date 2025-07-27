@@ -1,4 +1,4 @@
-const width = 1000, height = 650, margin = 50;
+const width = 923, height = 650, margin = 50;
 let scene = 0;
 const svg = d3.select("#viz").append("svg")
   .attr("width", width)
@@ -178,6 +178,86 @@ function drawBarChart({ data }) {
     .attr("font-weight", "bold")
     .attr("fill", "#666")
     .text("Rankings drop off less significantly after this point");
+
+  // Add horizontal dotted lines for lowest ranking from each system
+  const timesLowest = d3.min(datasets["Times"], d => d.score);
+  const shanghaiLowest = d3.min(datasets["Shanghai"], d => d.score);
+  const cwurLowest = d3.min(datasets["CWUR"], d => d.score);
+  
+  // Times lowest line (blue)
+  const timesLowestY = y(timesLowest);
+  svg.append("line")
+    .attr("x1", margin)
+    .attr("y1", timesLowestY)
+    .attr("x2", width - margin)
+    .attr("y2", timesLowestY)
+    .attr("stroke", "#1f77b4")
+    .attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", "3,3");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", timesLowestY - 20)
+    .attr("font-size", "12px")
+    .attr("fill", "#1f77b4")
+    .text("Times Lowest");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", timesLowestY - 8)
+    .attr("font-size", "12px")
+    .attr("fill", "#1f77b4")
+    .text(`Ranking: ${timesLowest.toFixed(1)}`);
+    
+  // Shanghai lowest line (orange)
+  const shanghaiLowestY = y(shanghaiLowest);
+  svg.append("line")
+    .attr("x1", margin)
+    .attr("y1", shanghaiLowestY)
+    .attr("x2", width - margin)
+    .attr("y2", shanghaiLowestY)
+    .attr("stroke", "#ff7f0e")
+    .attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", "3,3");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", shanghaiLowestY + 4)
+    .attr("font-size", "12px")
+    .attr("fill", "#ff7f0e")
+    .text("Shanghai Lowest");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", shanghaiLowestY + 16)
+    .attr("font-size", "12px")
+    .attr("fill", "#ff7f0e")
+    .text(`Ranking: ${shanghaiLowest.toFixed(1)}`);
+    
+  // CWUR lowest line (green)
+  const cwurLowestY = y(cwurLowest);
+  svg.append("line")
+    .attr("x1", margin)
+    .attr("y1", cwurLowestY)
+    .attr("x2", width - margin)
+    .attr("y2", cwurLowestY)
+    .attr("stroke", "#2ca02c")
+    .attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", "3,3");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", cwurLowestY + 4)
+    .attr("font-size", "12px")
+    .attr("fill", "#2ca02c")
+    .text("CWUR Lowest");
+    
+  svg.append("text")
+    .attr("x", width - margin + 5)
+    .attr("y", cwurLowestY + 16)
+    .attr("font-size", "12px")
+    .attr("fill", "#2ca02c")
+    .text(`Ranking: ${cwurLowest.toFixed(1)}`);
 
     
   // Add legend at bottom
