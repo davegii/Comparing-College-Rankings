@@ -18,7 +18,19 @@ const colorPalette = [
 ];
 
 //parse the data
-function parseData(data, year) {
+function parseTimesData(data, year) {
+    return data.filter(d => d.year === year)
+      .filter(d => +d.world_rank <= 100)  // Limit to top 100
+      .sort((a, b) => +a.world_rank - +b.world_rank)  // Sort by rank
+      .map(d => ({
+        name: d.university_name,
+        score: +d.total_score,
+        country: d.country,  // Use country column directly from timesData.csv
+        rank: +d.world_rank
+      }));
+  }
+  
+function parseShanghaiData(data, year) {
     return data.filter(d => d.year === year)
       .filter(d => +d.world_rank <= 100)  // Limit to top 100
       .sort((a, b) => +a.world_rank - +b.world_rank)  // Sort by rank
@@ -38,7 +50,7 @@ function parseData(data, year) {
       .map(d => ({
         name: d.institution,
         score: +d.score,
-        country: schoolCountryMap[d.institution] || "Unknown",
+        country: d.country,  // Use country column directly from cwurData.csv
         rank: +d.world_rank
       }));
   }
@@ -61,8 +73,8 @@ Promise.all([
     countryColorMap[country] = colorPalette[index % colorPalette.length];
   });
   
-  datasets["Times"] = parseData(timesData, "2014");
-  datasets["Shanghai"] = parseData(shanghaiData, "2014");
+  datasets["Times"] = parseTimesData(timesData, "2014");
+  datasets["Shanghai"] = parseShanghaiData(shanghaiData, "2014");
   datasets["CWUR"] = parseCWURData(cwurData, "2014");
 
   renderScene(scene); // this will draw bar chart
